@@ -1,0 +1,111 @@
+﻿@using IEP.Web.Models.Auction
+
+@model List<AuctionModel>
+
+@{
+	var list = Model;
+}
+
+<div class="container">
+	<div class="row">
+		@for (int i = 0; i < list.Count && i < 10; i++)
+		{
+			<div class="col-md-3 col-sm-6">
+				<div class="thumbnail text-center">
+					<img src="~/Uploads/Images/@list.ElementAt(i).Img" style="max-width: 350px; max-height: 150px" />
+					<h4 style="color:red"> @list.ElementAt(i).Name </h4>
+					<p> Pocetna cena: @list.ElementAt(i).StartPrice @list.ElementAt(i).Currency</p>
+					<p>Trajanje: @list.ElementAt(i).DurationTime</p>
+					@if (@list.ElementAt(i).AuctionStatusId == 1)
+					{
+						<h3><p class="label label-default"> Status: @list.ElementAt(i).AuctionStatus</p></h3>
+					}
+					else if (@list.ElementAt(i).AuctionStatusId == 2)
+					{
+						<h3><p class="label label-success"> Status: @list.ElementAt(i).AuctionStatus</p></h3>
+					}
+					else
+					{
+						<h3><p class="label label-danger"> Status: @list.ElementAt(i).AuctionStatus</p></h3>
+					}
+
+
+					<hr class="line">
+					<div class="row">
+						<div class="col-md-6 col-sm-6">
+							<button class="btn btn-danger right" onclick="onOpen(@list.ElementAt(i).Id)"> Open</button>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		}
+	</div>
+</div>
+
+<script type="text/javascript">
+
+    function onOpen(Id) {
+
+         @if (User.Identity.IsAuthenticated)
+		 {
+             <text>
+               $.ajax({
+				   url: '/Auction/OpenAuction?id=' + Id ,
+                   method: 'GET',
+                   cache: false,
+				   success: function (data) {
+					   if (data.success) {
+						   OpenPartial();
+						   Lobibox.notify('success', {
+							   title: true,
+							   size: 'normal',
+							   soundPath: '/Sounds/',
+							   showClass: 'flipInX',
+							   hideClass: 'zoomOutDown',
+							   icon: true,
+							   msg: 'Uspesno otvorena ponuda!',
+							   img: null,
+							   closable: true,
+							   delay:2000,
+							   delayIndicator: true,
+							   closeOnClick: true,
+							   width: 400,
+							   sound: true,
+							   position: "top left"
+						   });
+					   }
+					   else {
+						   alert('NEUSPESNO');
+					   }
+                   }
+                });
+            </text>
+		 }
+		 else
+		 {
+             <text>
+                window.location.href = '/Account/Login';
+            </text>
+         }
+
+    }
+
+	function OpenPartial() {
+
+		$.ajax({
+			url: '/Auction/Open',
+			method: 'GET',
+			cache: false,
+			success: function (data) {
+				$('#auctions').html(data);
+			}
+		});
+	}
+
+</script>
+
+
+
+

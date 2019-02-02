@@ -1,0 +1,58 @@
+﻿
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="~/Content/bootstrap.css" rel="stylesheet" />
+	<link href="~/Content/Site.css" rel="stylesheet" />
+	<link href="~/Content/lobibox.min.css" rel="stylesheet" />
+	<script src="~/Scripts/jquery-3.3.1.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+</head>
+<body>
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/">Auction House</a>
+				</div>
+				<ul class="nav navbar-nav">
+
+					@if (User.IsInRole("Registred User"))
+					{
+						<li> @Html.ActionLink("Kupovina Tokena", "Index", "Token")</li>
+						<li> @Html.ActionLink("Pregled narudzbina tokena", "List", "Token")</li>
+						<li> @Html.ActionLink("Pregled dobijenih aukcija", "WonAuctionList", "Auction")</li>
+						<li> @Html.ActionLink("Dodaj Aukciju", "Create", "Auction")</li>
+						<li></li>
+					}
+
+
+					@if (User.IsInRole("Admin"))
+					{
+						<li> @Html.ActionLink("Otvori Aukciju", "OpenAuctions", "Auction", new { area = "" }, new { @class = "navbar-item" })</li>
+						<li> @Html.ActionLink("Podesavanja", "Index", "ApplicationSettings", new { area = "" }, new { @class = "navbar-item" })</li>
+					}
+				</ul>
+				@Html.Partial("_Login")
+			</div>
+		</nav>
+
+		<div class="container body-content">
+			@RenderBody()
+			<hr />
+			<footer>
+				<p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+			</footer>
+		</div>
+
+		<script src="~/Scripts/bootstrap.min.js"></script>
+		<script src="~/Scripts/lobibox.min.js"></script>
+
+	
+		@RenderSection("scripts", required: false)
+	
+</body>
+</html>

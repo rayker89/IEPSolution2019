@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D3AE17B4-5C2E-427A-8350-97A7E206B983}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IEP.Data</RootNamespace>
+    <AssemblyName>IEP.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="dbContextManager\ApplicationDbContext.cs" />
+    <Compile Include="Domain\ApplicationSettings.cs" />
+    <Compile Include="Domain\Auction.cs" />
+    <Compile Include="Domain\AuctionStatus.cs" />
+    <Compile Include="Domain\Bid.cs" />
+    <Compile Include="Domain\Currency.cs" />
+    <Compile Include="Domain\Order.cs" />
+    <Compile Include="Domain\OrderStatus.cs" />
+    <Compile Include="Enums\EnAuctionStatuses.cs" />
+    <Compile Include="Enums\EnumOrderStatuses.cs" />
+    <Compile Include="Migrations\201811221924111_Initial.cs" />
+    <Compile Include="Migrations\201811221924111_Initial.Designer.cs">
+      <DependentUpon>201811221924111_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811231839125_02-Orders.cs" />
+    <Compile Include="Migrations\201811231839125_02-Orders.Designer.cs">
+      <DependentUpon>201811231839125_02-Orders.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812011719495_03-Bid.cs" />
+    <Compile Include="Migrations\201812011719495_03-Bid.Designer.cs">
+      <DependentUpon>201812011719495_03-Bid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812021017400_04-Settings.cs" />
+    <Compile Include="Migrations\201812021017400_04-Settings.Designer.cs">
+      <DependentUpon>201812021017400_04-Settings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901251700335_UpdBidTbl.cs" />
+    <Compile Include="Migrations\201901251700335_UpdBidTbl.Designer.cs">
+      <DependentUpon>201901251700335_UpdBidTbl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901261717450_AuctionBider.cs" />
+    <Compile Include="Migrations\201901261717450_AuctionBider.Designer.cs">
+      <DependentUpon>201901261717450_AuctionBider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901262343057_Curencies1.cs" />
+    <Compile Include="Migrations\201901262343057_Curencies1.Designer.cs">
+      <DependentUpon>201901262343057_Curencies1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901302021543_AuctionCurrency.cs" />
+    <Compile Include="Migrations\201901302021543_AuctionCurrency.Designer.cs">
+      <DependentUpon>201901302021543_AuctionCurrency.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901311719458_OrderUser.cs" />
+    <Compile Include="Migrations\201901311719458_OrderUser.Designer.cs">
+      <DependentUpon>201901311719458_OrderUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902011719291_OrderCreateDate.cs" />
+    <Compile Include="Migrations\201902011719291_OrderCreateDate.Designer.cs">
+      <DependentUpon>201902011719291_OrderCreateDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902011816373_OrderTokenNum.cs" />
+    <Compile Include="Migrations\201902011816373_OrderTokenNum.Designer.cs">
+      <DependentUpon>201902011816373_OrderTokenNum.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="Content\bootstrap-theme.css.map" />
+    <None Include="Content\bootstrap-theme.min.css.map" />
+    <None Include="Content\bootstrap.css.map" />
+    <None Include="Content\bootstrap.min.css.map" />
+    <None Include="fonts\glyphicons-halflings-regular.eot" />
+    <None Include="fonts\glyphicons-halflings-regular.ttf" />
+    <None Include="fonts\glyphicons-halflings-regular.woff" />
+    <None Include="fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="packages.config" />
+    <None Include="Scripts\jquery-1.9.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201811221924111_Initial.resx">
+      <DependentUpon>201811221924111_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811231839125_02-Orders.resx">
+      <DependentUpon>201811231839125_02-Orders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812011719495_03-Bid.resx">
+      <DependentUpon>201812011719495_03-Bid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812021017400_04-Settings.resx">
+      <DependentUpon>201812021017400_04-Settings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901251700335_UpdBidTbl.resx">
+      <DependentUpon>201901251700335_UpdBidTbl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901261717450_AuctionBider.resx">
+      <DependentUpon>201901261717450_AuctionBider.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901262343057_Curencies1.resx">
+      <DependentUpon>201901262343057_Curencies1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901302021543_AuctionCurrency.resx">
+      <DependentUpon>201901302021543_AuctionCurrency.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901311719458_OrderUser.resx">
+      <DependentUpon>201901311719458_OrderUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902011719291_OrderCreateDate.resx">
+      <DependentUpon>201902011719291_OrderCreateDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902011816373_OrderTokenNum.resx">
+      <DependentUpon>201902011816373_OrderTokenNum.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IEP.Security\IEP.Security.csproj">
+      <Project>{9f00f033-6741-4922-9a88-61acdb9e1d93}</Project>
+      <Name>IEP.Security</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\jquery-1.9.1.js" />
+    <Content Include="Scripts\jquery-1.9.1.min.js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

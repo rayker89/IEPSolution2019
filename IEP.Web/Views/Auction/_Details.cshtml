@@ -1,0 +1,271 @@
+﻿@model IEP.Web.Models.Auction.AuctionModel
+
+
+<div class="container">
+	<div class="row">
+
+		<div class="col-md-3 col-sm-6">
+			<div class="thumbnail text-center">
+				<img src="~/Uploads/Images/@Model.Img" style="max-width: 350px; max-height: 150px" />
+				@Html.ActionLink(Model.Name, "Details", "Auction", new { @class = "product-title" })
+				<p> Trenutna cena: @Model.CurrentPrice @Model.Currency</p>
+				@if (Model.AuctionStatusId == 2)
+				{
+					<p class="demo" data-status="@Model.AuctionStatusId" data-id="@Model.Id" data-date="@Model.ClosedDate.ToString("yyyy-MM-ddTHH:mm:ssZ")"> @Model.OstaloVreme.ToString(@"hh\:mm\:ss") </p>
+				}
+				else
+				{
+					<p>EXPIRED</p>
+				}
+
+
+				@if (Model.AuctionStatusId == 2)
+				{
+					if (@Model.AuctionBiderId != 0)
+					{
+						<h4><p class="label label-info">Ponuda: @Model.AuctionBider</p></h4>
+					}
+					else
+					{
+						<h4><p class="label label-warning">Nema ponuda</p></h4>
+					}
+
+				}
+				else
+				{
+					if (@Model.AuctionBiderId != 0)
+					{
+						<h4><p class="label label-info">Pobednik: @Model.AuctionBider</p></h4>
+					}
+					else
+					{
+						<h4><p class="label label-warning">Nema ponuda</p></h4>
+					}
+				}
+				@if (@Model.AuctionStatusId == 1)
+				{
+					<h3><p class="label label-default"> Status: @Model.AuctionStatus</p></h3>
+				}
+				else if (@Model.AuctionStatusId == 2)
+				{
+					<h3><p class="label label-success"> Status: @Model.AuctionStatus</p></h3>
+				}
+				else
+				{
+					<h3><p class="label label-danger"> Status: @Model.AuctionStatus</p></h3>
+				}
+
+
+				<hr class="line">
+				@if (Model.AuctionStatusId == 2)
+				{
+					<div class="row">
+						<div class="col-md-6 col-sm-6">
+							<input id="TokenNum_@Model.Id" type="number" class="form-control" value="@(Model.CurrentPrice / Model.TokenValue + 1)" min="@(Model.CurrentPrice / Model.TokenValue + 1)">
+						</div>
+
+						<div class="col-md-6 col-sm-6">
+							<button class="btn btn-danger right" onclick="onBidNow(@Model.Id)"> BID NOW</button>
+						</div>
+
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<p><b>Lista Ponuda</b></p>
+
+<table class="table">
+	<thead class="thead-dark">
+		<tr>
+			<th scope="col">Id korisnika</th>
+			<th scope="col">Broj tokena</th>
+			<th scope="col">Datum i vreme</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var bid in Model.Bids)
+		{
+			<tr>
+				<td>@bid.ContactName</td>
+				<td>@bid.TokenNumber</td>
+				<td>@bid.BidTime</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<script src="~/Scripts/jquery.signalR-2.4.0.js"></script>
+<script src="~/signalR/hubs"></script>
+
+<script type="text/javascript">
+	var myHub = $.connection.myHub;
+	// Setting logging to true so that we can see whats happening in the browser console log. [OPTIONAL]
+	$.connection.hub.logging = true;
+	// Start the hub
+		$.connection.hub.start();
+
+
+	$(document).ready(function () {
+		//timer
+		$(".demo").each(function (index) {
+			var self = this;
+			var indexA = $(self).data("id");
+			var date = $(self).data("date");
+			var status = $(self).data("status");
+				var x = setInterval(function () {
+					var countDownDate = new Date(date).getTime();
+					// Get todays date and time
+					var now = new Date().getTime() + 3600000;
+
+					// Find the distance between now and the count down date
+					var distance = countDownDate - now;
+
+					// Time calculations for days, hours, minutes and seconds
+					var hours = Math.floor(distance / (1000 * 60 * 60));
+					var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+					var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+					if (hours < 10) hours = '0' + hours;
+					if (minutes < 10) minutes = '0' + minutes;
+					if (seconds < 10) seconds = '0' + seconds;
+
+					// Display the result in the element with id="demo"
+					$(self).text(hours + ":"
+						+ minutes + ":" + seconds + "");
+
+					// If the count down is finished, write some text
+					if (distance < 0) {
+						clearInterval(x);
+						$(self).text("EXPIRED");
+						if (status != 3) {
+							changeStatus(indexA);
+						}
+					}
+				}, 1000);
+		});
+	});
+
+	function changeStatus(id) {
+
+		$.ajax({
+			url: '/Auction/ChangeStatus?id=' + id,
+			method: 'GET',
+			cache: false,
+			success: function (data) {
+				if (data.success) {
+
+					myHub.server.loadall();
+				}
+				else {
+					alert('NEUSPESNO');
+				}
+
+			}
+
+		});
+
+
+	}
+
+	myHub.client.detailsReload = function (id) {
+
+		$.ajax({
+		url: '/Auction/DetailsPartialView?Id=' + id,
+		method: 'GET',
+		cache: false,
+		success: function (data) {
+		$('#auctionDetails').html(data);
+								}
+		});
+
+	}
+
+
+
+
+		function onBidNow(id) {
+
+			var TokenNum = $('#TokenNum_' + id).val();
+
+         @if (User.Identity.IsAuthenticated)
+		 {
+             <text>
+			$.ajax({
+				url: '/Auction/BidNow?productId=' + id + '&TokenNum=' + TokenNum,
+				method: 'GET',
+				cache: false,
+				success: function (data) {
+					if (data.success) {
+						myHub.server.loadall();
+						myHub.server.reload(@Model.Id);
+						$.ajax({
+							url: '/Auction/DetailsPartialView?Id=@Model.Id',
+							method: 'GET',
+							cache: false,
+							success: function (data) {
+								$('#auctionDetails').html(data);
+							}
+						});
+
+
+						Lobibox.notify('success', {
+							title: true,
+							size: 'normal',
+							soundPath: '/Sounds/',
+							showClass: 'flipInX',
+							hideClass: 'zoomOutDown',
+							icon: true,
+							msg: 'Uspesno postavljena ponuda!',
+							img: null,
+							closable: true,
+							delay: 1000,
+							delayIndicator: true,
+							closeOnClick: true,
+							width: 400,
+							sound: true,
+							position: "top left"
+						});
+					}
+					else {
+						Lobibox.notify('error', {
+							title: true,
+							size: 'normal',
+							soundPath: '/Sounds/',
+							showClass: 'flipInX',
+							hideClass: 'zoomOutDown',
+							icon: true,
+							msg: 'Nemate dovoljno tokena!',
+							img: null,
+							closable: true,
+							delay: 2000,
+							delayIndicator: true,
+							closeOnClick: true,
+							width: 400,
+							sound: true,
+							position: "top left"
+						});
+					}
+
+				}
+
+			});
+            </text>
+		 }
+		 else
+		 {
+             <text>
+			window.location.href = '/Account/Login';
+            </text>
+         }
+
+	}
+
+
+</script>
+
+
+

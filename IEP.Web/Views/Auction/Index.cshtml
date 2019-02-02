@@ -1,0 +1,113 @@
+﻿@model IEP.Web.Models.Auction.AuctionsModel
+
+<div class="container">
+	<div class="row">
+		<div class="col col-sm-12 col-md-2">
+			<div class="form-group">
+				<label>Min</label>
+				<input id="min" type="number" class="form-control" placeholder="$0">
+			</div>
+		</div>
+		<div class="col col-sm-12 col-md-2">
+			<div class="form-group">
+				<label>Max</label>
+				<input id="max" type="number" class="form-control" placeholder="$1,000">
+			</div>
+		</div>
+		<div class="col col-sm-12 col-md-4">
+			<label>Search text</label>
+			<input id="searchText" class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search topics or keywords">
+		</div>
+		<div class="col col-sm-12 col-md-2">
+			<label>Auction Type</label>
+			<select id="searchTypeId" class="form-control">
+				<option value="2"> Otvorene </option>
+				<option value="3"> Zatvorene </option>
+			</select>
+		</div>
+		<div class="col col-sm-12 col-md-2" style="line-height: 59px;">
+			<button class="btn btn-success" type="submit" style="height: 34px; text-align:center; vertical-align: bottom;" onclick="loadL()">Search</button>
+		</div>
+	</div>
+	<div id="testId">
+		@{Html.RenderAction("GetList");}
+	</div>
+</div>
+
+
+<div> <span id="newTime"></span> </div>
+
+
+
+
+<script src="~/Scripts/jquery.signalR-2.4.0.js"></script>
+<script src="~/signalR/hubs"></script>
+
+<script type="text/javascript">
+	var myHub = $.connection.myHub;
+	// Setting logging to true so that we can see whats happening in the browser console log. [OPTIONAL]
+	$.connection.hub.logging = true;
+	$.connection.hub.start();
+
+	myHub.client.loadList = function() {
+		var min = $('#min').val();
+		var max = $('#max').val();
+		var searchText = $('#searchText').val();
+		var searchTypeId = $('#searchTypeId').val();
+
+		min = min.length > 0 ? min : 0;
+		max = max.length > 0 ? max : 0;
+		searchText = searchText.length > 0 ? searchText : '';
+
+		$.ajax({
+			url: '/Auction/GetList?min=' + min + '&max=' + max + '&searchText=' + searchText + '&auctionTypeId=' + searchTypeId,
+			method: 'GET',
+			cache: false,
+			success: function (data) {
+				$('#testId').html(data);
+			}
+		});
+
+	}
+
+	function loadL() {
+		var min = $('#min').val();
+		var max = $('#max').val();
+		var searchText = $('#searchText').val();
+		var searchTypeId = $('#searchTypeId').val();
+
+		min = min.length > 0 ? min : 0;
+		max = max.length > 0 ? max : 0;
+		searchText = searchText.length > 0 ? searchText : '';
+
+		$.ajax({
+			url: '/Auction/GetList?min=' + min + '&max=' + max + '&searchText=' + searchText + '&auctionTypeId=' + searchTypeId,
+			method: 'GET',
+			cache: false,
+			success: function (data) {
+				$('#testId').empty().html(data);
+			}
+		});
+
+	}
+
+	@*(function () {
+		// Defining a connection to the server hub.
+		var myHub = $.connection.myHub;
+		// Setting logging to true so that we can see whats happening in the browser console log. [OPTIONAL]
+		$.connection.hub.logging = true;
+		// Start the hub
+		$.connection.hub.start();
+		// This is the client method which is being called inside the MyHub constructor method every 3 seconds
+		myHub.client.SendServerTime = function (serverTime) {
+			// Set the received serverTime in the span to show in browser
+			$("#newTime").text(serverTime);
+		};
+	}());*@
+
+</script>
+
+
+
+
+

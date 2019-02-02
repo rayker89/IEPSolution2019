@@ -1,0 +1,113 @@
+﻿@model IEP.Web.Models.Admin.ApplicationSettingsViewModel
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Stranica za kupovinu Tokena</h2>
+
+
+@using (Html.BeginForm("BuyTokens", "Token", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+	@Html.AntiForgeryToken()
+	<hr />
+
+	@Html.ValidationSummary("", new { @class = "text-danger" })
+
+	<div style="background-color: silver; margin-left: 0px; margin-right: 0px;" class="form-group">
+		@Html.LabelFor(m => m.SilverPackageTokens, new { @class = "col-md-2 control-label" })
+		<div class="col-md-2">
+			@Html.TextBoxFor(m => m.SilverPackageTokens, new { @class = "form-control" })
+		</div>
+		<div>
+			<a id="c-mobile-payment-widget" href="https://stage.centili.com/payment/widget?apikey=3854cc76184c32794a747683c1e424ec&userid=@Model.SilverPackageTokens" onclick="createOrder(@Model.SilverPackageTokens, @Model.TokenValue)">
+				<img src="https://www.centili.com/images/centili-widget-button.png" />
+			</a>
+		</div>
+	</div>
+
+
+	<div style="background-color: gold; margin-left: 0px; margin-right: 0px;" class="form-group">
+		@Html.LabelFor(m => m.GoldPackageTokens, new { @class = "col-md-2 control-label" })
+		<div class="col-md-2">
+			@Html.TextBoxFor(m => m.GoldPackageTokens, new { @class = "form-control" })
+		</div>
+		<div>
+			<a id="c-mobile-payment-widget" href="https://stage.centili.com/payment/widget?apikey=3854cc76184c32794a747683c1e424ec&userid=@Model.GoldPackageTokens" onclick="createOrder(@Model.GoldPackageTokens, @Model.TokenValue)">
+				<img src="https://www.centili.com/images/centili-widget-button.png" />
+			</a>
+		</div>
+	</div>
+
+
+	<div style="background-color: floralwhite; margin-left: 0px; margin-right: 0px;" class="form-group">
+		@Html.LabelFor(m => m.PlatinumPackageTokens, new { @class = "col-md-2 control-label" })
+		<div class="col-md-2">
+			@Html.TextBoxFor(m => m.PlatinumPackageTokens, new { @class = "form-control" })
+		</div>
+	<div>
+			<a id="c-mobile-payment-widget" href="https://stage.centili.com/payment/widget?apikey=3854cc76184c32794a747683c1e424ec&userid=@Model.PlatinumPackageTokens" onclick="createOrder(@Model.PlatinumPackageTokens, @Model.TokenValue)">
+				<img src="https://www.centili.com/images/centili-widget-button.png" />
+			</a>
+	</div>
+	</div>
+
+}	
+	<script type="text/javascript">
+
+		@*function onTest() {
+			$.ajax({
+				url: 'https://api.centili.com/api/payment/1_3/transactionHTTP/1.1',
+				method: 'POST',
+				cache: false,
+				crossDomain: true,
+				contentType: "application/json",
+				data: {
+					"apikey": "3854cc76184c32794a747683c1e424ec", "msisdn": "38162635155", "price": "1"
+				},
+				headers: {
+					"Access-Control-Allow-Origin": "*"
+				},
+				success: function (data) {
+					console.log('DATA: ', data);
+					//if (data.success) {
+
+					//	myHub.server.loadall();
+					//}
+					//else {
+					//	alert('NEUSPESNO');
+					//}
+
+				}
+
+			});
+
+		}*@
+
+	
+
+		function createOrder(packageVal, tokenVal) {
+
+
+			$.ajax({
+				url: '/Token/CreateOrder?package=' + packageVal + '&TokenValue=' + tokenVal,
+				method: 'GET',
+				cache: false,
+				success: function (data) {
+					if (data.success) {
+
+						console.log(data);
+					}
+					else {
+						alert('NEUSPESNO');
+					}
+
+				}
+
+			});
+
+
+		}
+
+
+	</script>

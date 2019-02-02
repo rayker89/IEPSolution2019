@@ -1,0 +1,89 @@
+﻿@using IEP.Web.Models.Auction
+
+@model List<AuctionModel>
+
+@{
+	var list = Model;
+}
+@{
+	ViewBag.Title = "ListaDobijenihAukcija";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+	<div class="row">
+		@for (int i = 0; i < list.Count; i++)
+		{
+			<div class="col-md-3 col-sm-6">
+				<div class="thumbnail text-center">
+					<img src="~/Uploads/Images/@list.ElementAt(i).Img" style="max-width: 350px; max-height: 150px" />
+					@Html.ActionLink(list.ElementAt(i).Name, "Details", "Auction", new { Id = list.ElementAt(i).Id }, new { @class = "product-title" })
+					<p> Trenutna cena: @list.ElementAt(i).CurrentPrice @list.ElementAt(i).Currency</p>
+					@if (@list.ElementAt(i).AuctionStatusId == 2)
+					{
+						<p class="demo" data-status="@list.ElementAt(i).AuctionStatusId" data-id="@list.ElementAt(i).Id" data-date="@list.ElementAt(i).ClosedDate.ToString("yyyy-MM-ddTHH:mm:ssZ")"> @list.ElementAt(i).OstaloVreme.ToString(@"hh\:mm\:ss") </p>
+					}
+					else
+					{
+						<p>EXPIRED</p>
+					}
+
+
+					@if (@list.ElementAt(i).AuctionStatusId == 2)
+					{
+						if (@list.ElementAt(i).AuctionBiderId != 0)
+						{
+							<h4><p class="label label-info">Ponuda: @list.ElementAt(i).AuctionBider</p></h4>
+						}
+						else
+						{
+							<h4><p class="label label-warning">Nema ponuda</p></h4>
+						}
+
+					}
+					else
+					{
+						if (@list.ElementAt(i).AuctionBiderId != 0)
+						{
+							<h4><p class="label label-info">Pobednik: @list.ElementAt(i).AuctionBider</p></h4>
+						}
+						else
+						{
+							<h4><p class="label label-warning">Nema ponuda</p></h4>
+						}
+					}
+					@if (@list.ElementAt(i).AuctionStatusId == 1)
+					{
+						<h3><p class="label label-default"> Status: @list.ElementAt(i).AuctionStatus</p></h3>
+					}
+					else if (@list.ElementAt(i).AuctionStatusId == 2)
+					{
+						<h3><p class="label label-success"> Status: @list.ElementAt(i).AuctionStatus</p></h3>
+					}
+					else
+					{
+						<h3><p class="label label-danger"> Status: @list.ElementAt(i).AuctionStatus</p></h3>
+					}
+
+
+					<hr class="line">
+					@if (@list.ElementAt(i).AuctionStatusId == 2)
+					{
+						<div class="row">
+							<div class="col-md-6 col-sm-6">
+								<input id="TokenNum_@list.ElementAt(i).Id" type="number" class="form-control" value="@(list.ElementAt(i).CurrentPrice / list.ElementAt(i).TokenValue + 1)" min="@(list.ElementAt(i).CurrentPrice / list.ElementAt(i).TokenValue + 1)">
+							</div>
+
+							<div class="col-md-6 col-sm-6">
+								<button class="btn btn-danger right" onclick="onBidNow(@list.ElementAt(i).Id)"> BID NOW</button>
+							</div>
+
+						</div>
+					}
+				</div>
+			</div>
+
+		}
+	</div>
+</div>
+
