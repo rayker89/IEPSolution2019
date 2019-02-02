@@ -170,6 +170,7 @@
 				   success: function (data) {
 					   if (data.success) {
 						   myHub.server.loadall();
+						   myHub.server.reload(id);
 						   Lobibox.notify('success', {
 							   title: true,
 							   size: 'normal',
